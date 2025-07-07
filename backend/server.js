@@ -10,13 +10,7 @@ const reportRoutes = require("./routes/reportRoutes");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "Authorization"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 
 //connect Database
 connectDB();
