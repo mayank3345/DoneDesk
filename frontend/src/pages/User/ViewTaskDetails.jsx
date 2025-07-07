@@ -6,48 +6,45 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import AvatarGroup from "../../components/AvatarGroup";
 import moment from "moment";
 import { LuSquareArrowOutUpRight } from "react-icons/lu";
+import Loader from "../../components/Loader";
 
 const ViewTaskDetails = () => {
   const { id } = useParams();
   const [task, setTask] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getStatusTagColor = (status) => {
     switch (status) {
       case "In Progress":
         return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
-
       case "Completed":
         return "text-lime-500 bg-lime-50 border border-lime-500/20";
-
       default:
         return "text-violet-500 bg-violet-50 border border-violet-500/10";
     }
   };
 
-  // get Task info by ID
   const getTaskDetailsByID = async () => {
+    setIsLoading(true);
     try {
       const response = await axiosInstance.get(
         API_PATHS.TASKS.GET_TASK_BY_ID(id)
       );
-
       if (response.data) {
-        const taskInfo = response.data;
-        setTask(taskInfo);
+        setTask(response.data);
       }
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // handle todo check
   const updateTodoChecklist = async (index) => {
     const todoChecklist = [...task?.todoChecklist];
     const taskId = id;
-
     if (todoChecklist && todoChecklist[index]) {
       todoChecklist[index].completed = !todoChecklist[index].completed;
-
       try {
         const response = await axiosInstance.put(
           API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
@@ -56,7 +53,6 @@ const ViewTaskDetails = () => {
         if (response.status === 200) {
           setTask(response.data?.task || task);
         } else {
-          // Optionally revert the toggle if the API call fails.
           todoChecklist[index].completed = !todoChecklist[index].completed;
         }
       } catch (error) {
@@ -65,10 +61,9 @@ const ViewTaskDetails = () => {
     }
   };
 
-  // Handle attachment link lick
   const handleLinkClick = (link) => {
     if (!/^https?:\/\//i.test(link)) {
-      link = "https://" + link; // Default to HTTPS
+      link = "https://" + link;
     }
     window.open(link, "_blank");
   };
@@ -79,9 +74,16 @@ const ViewTaskDetails = () => {
     }
     return () => {};
   }, [id]);
+
   return (
     <DashboardLayout activeMenu="My Tasks">
-      <div className="mt-5">
+      <div className="mt-5 relative min-h-full">
+        {isLoading && (
+          <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center">
+            <Loader />
+          </div>
+        )}
+
         {task && (
           <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
             <div className="form-card col-span-3">
@@ -89,7 +91,6 @@ const ViewTaskDetails = () => {
                 <h2 className="text-sm md:text-xl font-medium">
                   {task?.title}
                 </h2>
-
                 <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
                     task?.status
@@ -121,7 +122,6 @@ const ViewTaskDetails = () => {
                   <label className="text-xs font-medium text-slate-500">
                     Assigned To
                   </label>
-
                   <AvatarGroup
                     avatars={
                       task?.assignedTo?.map((item) => item?.profileImageUrl) ||
@@ -136,7 +136,6 @@ const ViewTaskDetails = () => {
                 <label className="text-xs font-medium text-slate-500">
                   Todo Checklist
                 </label>
-
                 {task?.todoChecklist?.map((item, index) => (
                   <TodoCheckList
                     key={`todo_${index}`}
@@ -152,7 +151,6 @@ const ViewTaskDetails = () => {
                   <label className="text-xs font-medium text-slate-500">
                     Attachments
                   </label>
-
                   {task?.attachments?.map((link, index) => (
                     <Attachment
                       key={`link_${index}`}
@@ -177,7 +175,6 @@ const InfoBox = ({ label, value }) => {
   return (
     <>
       <label className="text-xs font-medium text-slate-500">{label}</label>
-
       <p className="text-[12px] md:text-[13px] font-medium text-gray-700 mt-0.5">
         {value}
       </p>
@@ -194,7 +191,6 @@ const TodoCheckList = ({ text, isChecked, onChange }) => {
         onChange={onChange}
         className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
       />
-
       <p className="text-[13px] text-gray-800">{text}</p>
     </div>
   );
@@ -210,10 +206,8 @@ const Attachment = ({ link, index, onClick }) => {
         <span className="text-xs text-gray-400 font-semibold mr-2">
           {index < 9 ? `0${index + 1}` : index + 1}
         </span>
-
         <p className="text-xs text-black">{link}</p>
       </div>
-
       <LuSquareArrowOutUpRight className="text-gray-400" />
     </div>
   );
