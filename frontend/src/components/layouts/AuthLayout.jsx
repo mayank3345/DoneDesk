@@ -1,11 +1,17 @@
 import React from "react";
 import UIBG from "../../assets/images/bg-2.jpg";
+import Logo from "../../assets/images/logo.png";
 
 const AuthLayout = ({ children }) => {
   return (
     <div className="flex">
-      <div className="w-screen h-screen md:w-[60vw] px-12 pt-8 pb-12">
-        <h2 className="text-3xl font-medium text-black">DoneDesk</h2>
+      <div className="w-screen  md:w-[60vw] px-12 pt-8">
+        <div className="flex gap-3 ">
+          <div>
+            <img src={Logo} alt="logo" className="w-10 h-10" />
+          </div>
+          <h2 className="text-3xl font-medium text-black">DoneDesk</h2>
+        </div>
         {children}
       </div>
 

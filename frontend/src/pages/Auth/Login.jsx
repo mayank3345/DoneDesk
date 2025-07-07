@@ -64,7 +64,7 @@ const Login = () => {
 
   return (
     <AuthLayout>
-      <div className="relative min-h-screen flex items-center justify-center">
+      <div className="relative h-[90vh] flex items-center justify-center">
         {/* Full Page Loader */}
         {isLoading && (
           <div className="absolute inset-0 bg-white bg-opacity-60 z-50 flex items-center justify-center">

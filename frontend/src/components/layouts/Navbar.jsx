@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import SideMenu from "./SideMenu";
+import Logo from "../../assets/images/logo.png";
 
 const Navbar = ({ activeMenu }) => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
@@ -20,7 +21,10 @@ const Navbar = ({ activeMenu }) => {
         )}
       </button>
 
-      <h2 className="text-lg font-medium text-black">DoneDesk</h2>
+      <div className="flex gap-3">
+        <img src={Logo} alt="logo" className="w-8 h-8" />
+        <h2 className="text-xl pt-0.5 font-medium text-black">DoneDesk</h2>
+      </div>
 
       {openSideMenu && (
         <div className="fixed top-[61px] -ml-4 bg-white">
