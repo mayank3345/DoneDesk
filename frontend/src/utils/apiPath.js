@@ -1,5 +1,5 @@
-export const BASE_URL = "https://donedesk-backend.onrender.com";
-
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+console.log(BASE_URL);
 export const API_PATHS = {
   AUTH: {
     REGISTER: "/api/auth/register", // Register a new user (Admin or Member)
