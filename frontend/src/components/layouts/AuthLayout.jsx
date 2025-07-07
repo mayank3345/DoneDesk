@@ -1,6 +1,6 @@
 import React from "react";
 import UIBG from "../../assets/images/bg-2.jpg";
-import Logo from "../../assets/images/logo.png";
+import Logo from "../../assets/images/Logo.png";
 
 const AuthLayout = ({ children }) => {
   return (
