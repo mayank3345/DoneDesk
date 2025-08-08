@@ -136,7 +136,7 @@ const SignUp = () => {
                   value={adminInviteToken}
                   onChange={(e) => setAdminInviteToken(e.target.value)}
                   label="Admin Invite Token"
-                  placeholder="Enter 10 digit Code"
+                  placeholder="9670664781"
                   type="text"
                   disabled={isLoading}
                 />
